@@ -18,6 +18,7 @@ import AppointmentBooking from '../pages/main/AppointmentBooking';
 //import LabTests from '../pages/main/LabTests';
 import Emergency from '../pages/main/Emergency';
 import Blog from '../pages/main/Blog';
+import BlogDetails from '../pages/main/BlogDetails';
 //import Contact from '../pages/main/Contact';
 
 const router = createBrowserRouter([
@@ -45,7 +46,7 @@ const router = createBrowserRouter([
       { path: '/home', element: <Navigate to="/doctors" replace /> },
       { path: '/doctors', element: <Doctors /> },
       { path: '/doctors/:id', element: <DoctorDetails /> },
-      { path: '/book-appointment', element: <AppointmentBooking /> },
+      { path: '/book-appointment/:id', element: <AppointmentBooking /> },
      // { path: '/medicines', element: <Medicines /> },
      // { path: '/medicines/:id', element: <MedicineDetails /> },
     //{ path: '/cart', element: <Cart /> },
@@ -53,6 +54,7 @@ const router = createBrowserRouter([
      // { path: '/lab-tests', element: <LabTests /> },
       { path: '/emergency', element: <Emergency /> },
       { path: '/blog', element: <Blog /> },
+      {path: '/blog/:id', element: <BlogDetails />}
      // { path: '/contact', element: <Contact /> },
     ],
   },
