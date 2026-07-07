@@ -30,7 +30,7 @@ const router = createBrowserRouter([
    },
   {
     path: '/',
-    element: <Navigate to="/home" replace />
+    element: <Navigate to="/doctors" replace />
   },
   {
      /* Auth Routing Tree */
@@ -60,7 +60,7 @@ const router = createBrowserRouter([
      // { path: '/lab-tests', element: <LabTests /> },
       { path: '/emergency', element: <Emergency /> },
       { path: '/blog', element: <Blog /> },
-      {path: '/blog/:id', element: <BlogDetails />}
+      {path: '/blog/:id', element: <BlogDetails />},
       { path: '/contact', element: <Contact /> },
 
     ],
