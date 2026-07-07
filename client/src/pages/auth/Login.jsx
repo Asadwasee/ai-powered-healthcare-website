@@ -26,7 +26,7 @@ function Login(){
     return(
         <div className="space-y-6 animate-fade-in">
             <div className="text-center">
-                <h1 className="text-3xl font-bold text-center mb-6 text-primary">Welcome Back</h1>
+                <h1 className="text-3xl font-bold text-center mb-2 text-primary">Welcome Back</h1>
 
                 <p className="text-gray-500 mt-2">
                     sign in to your account
@@ -40,13 +40,13 @@ function Login(){
             type="email"
             name="email"
             placeholder="Enter Your Email"
-            value={FormData.email}
+            value={formData.email}
             onChange={handleChange}
             label="Email"            />
             <PasswordInput
             name="password"
             placeholder="Enter Your Password"
-            value={FormData.password}
+            value={formData.password}
             onChange={handleChange}
             label="Password"            />
 
@@ -63,7 +63,7 @@ function Login(){
            </div>
 
            {/*LoginButton*/ }
-           <Button type="submit" >Create account</Button>
+           <Button type="submit" >Login</Button>
 
            {/*Signup*/ }
            <p className="text-center text-sm mt-4">Don't Have an Account?{""}

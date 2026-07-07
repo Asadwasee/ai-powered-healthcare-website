@@ -8,16 +8,6 @@ import Login from '../pages/auth/Login';
 import Signup from '../pages/auth/Signup';
 import ForgotPassword from '../pages/auth/ForgotPassword';
 import Home from '../pages/main/Home';
-import Doctors from '../pages/main/Doctors';
-import DoctorDetails from '../pages/main/DoctorDetails';
-import AppointmentBooking from '../pages/main/AppointmentBooking';
-import Medicines from '../pages/main/Medicines';
-import MedicineDetails from '../pages/main/MedicineDetails';
-import Cart from '../pages/main/Cart';
-import Checkout from '../pages/main/Checkout';
-import LabTests from '../pages/main/LabTests';
-import Emergency from '../pages/main/Emergency';
-import Blog from '../pages/main/Blog';
 import Contact from '../pages/main/Contact';
 
 const router = createBrowserRouter([
@@ -39,16 +29,6 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       { path: '/home', element: <Home /> },
-      { path: '/doctors', element: <Doctors /> },
-      { path: '/doctors/:id', element: <DoctorDetails /> },
-      { path: '/book-appointment', element: <AppointmentBooking /> },
-      { path: '/medicines', element: <Medicines /> },
-      { path: '/medicines/:id', element: <MedicineDetails /> },
-      { path: '/cart', element: <Cart /> },
-      { path: '/checkout', element: <Checkout /> },
-      { path: '/lab-tests', element: <LabTests /> },
-      { path: '/emergency', element: <Emergency /> },
-      { path: '/blog', element: <Blog /> },
       { path: '/contact', element: <Contact /> },
     ],
   },
