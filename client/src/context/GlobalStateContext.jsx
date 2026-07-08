@@ -1,9 +1,11 @@
-import { createContext, useState, useTransition } from 'react';
-
-export const GlobalStateContext = createContext();
+import { useState, useTransition } from 'react';
+import GlobalStateContext from './GlobalStateContext';
 
 export const GlobalStateProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('healthcareUser');
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
   const [cart, setCart] = useState([]);
   const [error, setError] = useState(null);
   const [isPending, startTransition] = useTransition(); // React 19 Async State Optimization
@@ -11,12 +13,15 @@ export const GlobalStateProvider = ({ children }) => {
   const login = (userData) => {
     startTransition(() => {
       setUser(userData);
+      localStorage.setItem('healthcareUser', JSON.stringify(userData));
     });
   };
 
   const logout = () => {
     setUser(null);
     setCart([]);
+    localStorage.removeItem('healthcareUser');
+    localStorage.removeItem('healthcareToken');
   };
 
   const addToCart = (product) => {
