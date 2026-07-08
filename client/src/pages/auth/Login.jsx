@@ -5,11 +5,12 @@ import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../../services/authService";
 import GlobalStateContext from "../../context/GlobalStateContext";
+
 function Login(){
     const navigate = useNavigate();
     const { login } = useContext(GlobalStateContext);
 
-    const[formData, setFormData] = useState({
+    const [formData, setFormData] = useState({
         email: "",
         password: "",
     });
@@ -43,7 +44,7 @@ function Login(){
     return(
         <div className="space-y-6 animate-fade-in">
             <div className="text-center">
-                <h1 className="text-3xl font-bold text-center mb-6 text-primary">Welcome Back</h1>
+                <h1 className="text-3xl font-bold text-center mb-2 text-primary">Welcome Back</h1>
 
                 <p className="text-gray-500 mt-2">
                     sign in to your account
@@ -53,22 +54,26 @@ function Login(){
            
 
            <form onSubmit={handleSubmit} className="space-y-4">
-                                {error && (
-                                    <p className="text-sm font-medium text-accent">{error}</p>
-                                )}
-            <Input
-            type="email"
-            name="email"
-            placeholder="Enter Your Email"
-                                value={formData.email}
-            onChange={handleChange}
-            label="Email"            />
-            <PasswordInput
-            name="password"
-            placeholder="Enter Your Password"
-                                value={formData.password}
-            onChange={handleChange}
-            label="Password"            />
+                        {error && (
+                            <p className="text-sm font-medium text-accent">{error}</p>
+                        )}
+
+                        <Input
+                            type="email"
+                            name="email"
+                            placeholder="Enter Your Email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            label="Email"
+                        />
+
+                        <PasswordInput
+                            name="password"
+                            placeholder="Enter Your Password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            label="Password"
+                        />
 
          
 
