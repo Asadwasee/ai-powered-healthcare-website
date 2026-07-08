@@ -39,7 +39,7 @@ function ForgotPassword(){
                            <Button type="submit">Send Reset Link</Button>
 
                            <Link
-                           to="/login" className="text-center text-sm text-primary hover:underline">
+                           to="/auth/login" className="text-center text-sm text-primary hover:underline">
                             Back to Login </Link>
             </form>
 

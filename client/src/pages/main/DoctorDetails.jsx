@@ -1,6 +1,7 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import doctors from "../../constants/doctors";
+import localDoctors from "../../constants/doctors";
+import { fetchDoctorById } from "../../services/doctorService";
 
 import {
   CalendarDays,
@@ -15,8 +16,21 @@ import { Button } from "../../components/ui/Button";
 
 function DoctorDetails() {
   const { id } = useParams();
+  const fallbackDoctor = localDoctors.find((doc) => doc.id === Number(id));
+  const [doctor, setDoctor] = useState(fallbackDoctor || null);
 
-  const doctor = doctors.find((doc) => doc.id === Number(id));
+  useEffect(() => {
+    const loadDoctor = async () => {
+      try {
+        const data = await fetchDoctorById(id);
+        setDoctor(data);
+      } catch {
+        // Keep the local fallback doctor if the API is unavailable.
+      }
+    };
+
+    loadDoctor();
+  }, [id]);
 
   if (!doctor) {
     return (

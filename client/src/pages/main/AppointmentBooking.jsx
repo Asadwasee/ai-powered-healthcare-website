@@ -1,17 +1,29 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 
-import doctors from "../../constants/doctors";
+import localDoctors from "../../constants/doctors";
+import { fetchDoctorById } from "../../services/doctorService";
 import DoctorSummaryCard from "../../components/appointment/DoctorSummaryCard";
 import AppointmentForm from "../../components/appointment/AppointmentForm";
 
 function AppointmentBooking() {
   const { id } = useParams();
+  const fallbackDoctor = localDoctors.find((doc) => doc.id === Number(id));
+  const [doctor, setDoctor] = useState(fallbackDoctor || null);
 
-  const doctor = doctors.find(
-    (doc) => doc.id === Number(id)
-  );
+  useEffect(() => {
+    const loadDoctor = async () => {
+      try {
+        const data = await fetchDoctorById(id);
+        setDoctor(data);
+      } catch {
+        // Keep the local fallback doctor if the API is unavailable.
+      }
+    };
+
+    loadDoctor();
+  }, [id]);
 
   if (!doctor) {
     return (

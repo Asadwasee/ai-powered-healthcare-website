@@ -1,12 +1,27 @@
-import React, { useState } from "react";
-import doctors from "../../constants/doctors";
+import { useEffect, useState } from "react";
+import localDoctors from "../../constants/doctors";
 import DoctorCard from "../../components/cards/DoctorCard";
 import { Input } from "../../components/ui/Input";
 import { Search, Filter } from "lucide-react";
+import { fetchDoctors } from "../../services/doctorService";
 
 function Doctors() {
   const [searchTerm, setSearchTerm] = useState("");
   const [specialization, setSpecialization] = useState("All");
+  const [doctors, setDoctors] = useState(localDoctors);
+
+  useEffect(() => {
+    const loadDoctors = async () => {
+      try {
+        const data = await fetchDoctors();
+        setDoctors(data);
+      } catch {
+        setDoctors(localDoctors);
+      }
+    };
+
+    loadDoctors();
+  }, []);
 
   const specializations = [
     "All",

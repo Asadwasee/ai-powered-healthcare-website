@@ -1,15 +1,20 @@
 import { Input } from "../../components/ui/Input";
 import PasswordInput from "../../components/ui/PasswordInput";
 import { Button } from "../../components/ui/Button";
-import {  useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { loginUser } from "../../services/authService";
+import GlobalStateContext from "../../context/GlobalStateContext";
 function Login(){
-
+    const navigate = useNavigate();
+    const { login } = useContext(GlobalStateContext);
 
     const[formData, setFormData] = useState({
         email: "",
         password: "",
     });
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e)=>{
         setFormData({
@@ -17,9 +22,21 @@ function Login(){
             [e.target.name]: e.target.value,
         });
     };
-    const handleSubmit = (e)=>{
+    const handleSubmit = async (e)=>{
         e.preventDefault();
-        console.log(formData);
+        setError("");
+        setLoading(true);
+
+        try {
+            const data = await loginUser(formData);
+            login(data);
+            localStorage.setItem("healthcareToken", data.token);
+            navigate("/doctors");
+        } catch (err) {
+            setError(err?.response?.data?.message || "Login failed. Please try again.");
+        } finally {
+            setLoading(false);
+        }
 
     };
 
@@ -36,17 +53,20 @@ function Login(){
            
 
            <form onSubmit={handleSubmit} className="space-y-4">
+                                {error && (
+                                    <p className="text-sm font-medium text-accent">{error}</p>
+                                )}
             <Input
             type="email"
             name="email"
             placeholder="Enter Your Email"
-            value={FormData.email}
+                                value={formData.email}
             onChange={handleChange}
             label="Email"            />
             <PasswordInput
             name="password"
             placeholder="Enter Your Password"
-            value={FormData.password}
+                                value={formData.password}
             onChange={handleChange}
             label="Password"            />
 
@@ -55,7 +75,7 @@ function Login(){
           {/* forgot Password */} 
            <div className="text-right text-sm">
             <Link
-           to= "/auth/forgotPassword"
+           to= "/auth/forgot-password"
            className="text-blue-500 hover:underline"
            >
             Forgot password? 
@@ -63,13 +83,13 @@ function Login(){
            </div>
 
            {/*LoginButton*/ }
-           <Button type="submit" >Create account</Button>
+           <Button type="submit" disabled={loading}>{loading ? "Signing in..." : "Login"}</Button>
 
            {/*Signup*/ }
            <p className="text-center text-sm mt-4">Don't Have an Account?{""}
             <Link 
-            to="/auth/Signup"
-            className="text-primary font-medium hover-underline"
+            to="/auth/signup"
+            className="text-primary font-medium hover:underline"
             >Signup</Link>
            </p>
              </form>
