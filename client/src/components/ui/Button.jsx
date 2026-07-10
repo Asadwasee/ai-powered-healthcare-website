@@ -1,4 +1,4 @@
-export const Button = ({ children, onClick, type = 'button', variant = 'primary', disabled = false }) => {
+export const Button = ({ children, onClick, type = 'button', variant = 'primary', disabled = false , className = "",}) => {
   const base = "relative overflow-hidden px-6 py-2.5 rounded-lg font-medium transition-all duration-200 transform active:scale-98 cursor-pointer focus:outline-none flex items-center justify-center gap-2";
   
   const styles = {
@@ -8,7 +8,7 @@ export const Button = ({ children, onClick, type = 'button', variant = 'primary'
   };
 
   return (
-    <button type={type} onClick={onClick} disabled={disabled} className={`${base} ${styles[variant]} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
+    <button type={type} onClick={onClick} disabled={disabled} className={`${base} ${styles[variant]} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} ${className}`}>
       {children}
     </button>
   );
