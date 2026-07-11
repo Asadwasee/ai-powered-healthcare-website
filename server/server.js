@@ -11,6 +11,8 @@ import authRoutes from './routes/authRoutes.js';
 import labRoutes from './routes/labRoutes.js';
 import emergencyRoutes from './routes/emergencyRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
+import medicineRoutes from './routes/medicineRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler.js';
@@ -41,6 +43,8 @@ app.use('/api/auth', authRoutes);   //testing done
 app.use('/api/lab', labRoutes); //testing done 
 app.use('/api/emergency', emergencyRoutes);  //testing done
 app.use('/api/blogs', blogRoutes);  //testing done 
+app.use('/api/medicines', medicineRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

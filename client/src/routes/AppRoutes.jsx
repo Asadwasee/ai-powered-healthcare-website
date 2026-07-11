@@ -13,6 +13,9 @@ import Emergency from '../pages/main/Emergency';
 import Blog from '../pages/main/Blog';
 import BlogDetails from '../pages/main/BlogDetails';
 import Contact from '../pages/main/Contact';
+import MedicineList from '../pages/medicine/MedicineList.jsx';
+import MedicineDetails from '../pages/medicine/MedicineDetails.jsx';
+import Checkout from '../pages/medicine/Checkout.jsx';
 
 const router = createBrowserRouter([
   {
@@ -41,6 +44,9 @@ const router = createBrowserRouter([
       { path: '/blog', element: <Blog /> },
       { path: '/blog/:id', element: <BlogDetails /> },
       { path: '/contact', element: <Contact /> },
+      { path: '/medicines', element: <MedicineList /> },
+      { path: '/medicines/:id', element: <MedicineDetails /> },
+      { path: '/checkout', element: <Checkout />  },
     ],
   },
   {
