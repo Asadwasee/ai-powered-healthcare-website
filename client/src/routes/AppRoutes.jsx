@@ -15,7 +15,14 @@ import BlogDetails from '../pages/main/BlogDetails';
 import Contact from '../pages/main/Contact';
 import MedicineList from '../pages/medicine/MedicineList.jsx';
 import MedicineDetails from '../pages/medicine/MedicineDetails.jsx';
-import Checkout from '../pages/medicine/Checkout.jsx';
+import Checkout from '../pages/medicine/Checkout.jsx'; 
+
+/* 
+  💡 NOTE FOR ASAD:
+  Navbar aur Footer global components hain, is liye inhein yahan har route mein alag se 
+  add karne ki zaroorat nahi hoti. Inhein direct "src/layouts/MainLayout.jsx" file mein 
+  import karke <Outlet /> ke upar aur neeche lagaya jata hai.
+*/
 
 const router = createBrowserRouter([
   {
@@ -34,13 +41,18 @@ const router = createBrowserRouter([
     ],
   },
   {
-    element: <MainLayout />,
+    // MainLayout ke andar aapka Navbar automatically include ho jayega
+    element: <MainLayout />, 
     children: [
       { path: '/home', element: <Home /> },
       { path: '/doctors', element: <Doctors /> },
       { path: '/doctors/:id', element: <DoctorDetails /> },
       { path: '/book-appointment/:id', element: <AppointmentBooking /> },
       { path: '/emergency', element: <Emergency /> },
+      
+      // NEW AI ROUTE: Symptom checker widget ki redirection ke liye
+      { path: '/ai-consultant', element: <Emergency /> }, // Abi ke liye Emergency par map kiya hai, bad mein change kar sakte hain
+      
       { path: '/blog', element: <Blog /> },
       { path: '/blog/:id', element: <BlogDetails /> },
       { path: '/contact', element: <Contact /> },

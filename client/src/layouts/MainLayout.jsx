@@ -1,14 +1,24 @@
+import React from 'react';
 import { Outlet } from 'react-router-dom';
-// Yahan Navbar aur Footer components import honge
+import Navbar from '../components/Navbar'; // Hum ne jo abhi banaya
+import Footer from '../components/Footer'; // Jab aap footer banayein gy tab un-comment kar lena
+
 const MainLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50/50">
-      <nav className="h-16 border-b border-gray-100 bg-white sticky top-0 z-40">Navbar Placeholder</nav>
-      <main className="grow max-w-7xl w-full mx-auto px-4 py-6">
-        <Outlet /> {/* Child pages yahan render honge */}
+    <div className="flex flex-col min-h-screen">
+      {/* Global Header Navigation */}
+      <Navbar /> 
+
+      {/* Dynamic Route Pages Render Here */}
+      <main className="flex-grow">
+        <Outlet /> 
       </main>
-      <footer className="bg-slate-900 text-white p-8">Footer Placeholder</footer>
+
+      {/* Global Footer Layer - Abhi comment kiya hai */}
+      { <Footer /> }
+      {/* <footer className="bg-white border-t py-4 text-center text-xs text-gray-400">Footer Component Pending</footer> */}
     </div>
   );
 };
+
 export default MainLayout;
