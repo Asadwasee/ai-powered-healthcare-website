@@ -3,7 +3,8 @@ import PasswordInput from "../../components/ui/PasswordInput";
 import { Button } from "../../components/ui/Button";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../../services/authService";
+//import { loginUser } from "../../services/authService";
+import  loginUser from "../../services/authService";
 import GlobalStateContext from "../../context/GlobalStateContext";
 
 function Login(){
@@ -29,17 +30,18 @@ function Login(){
         setLoading(true);
 
         try {
-            const data = await loginUser(formData);
-            login(data);
-            localStorage.setItem("healthcareToken", data.token);
-            navigate("/doctors");
-        } catch (err) {
-            setError(err?.response?.data?.message || "Login failed. Please try again.");
-        } finally {
-            setLoading(false);
-        }
+        const data = await loginUser(formData);
 
-    };
+        login(data);
+        localStorage.setItem("healthcareToken", data.token);
+        navigate("/doctors");
+
+    } catch (err) {
+        setError(err?.response?.data?.message || "Login failed. Please try again.");
+    } finally {
+        setLoading(false);
+    }
+};
 
     return(
         <div className="space-y-6 animate-fade-in">
@@ -80,7 +82,7 @@ function Login(){
           {/* forgot Password */} 
            <div className="text-right text-sm">
             <Link
-           to= "/auth/forgot-password"
+           to= "/forgot-password"
            className="text-blue-500 hover:underline"
            >
             Forgot password? 
@@ -93,7 +95,7 @@ function Login(){
            {/*Signup*/ }
            <p className="text-center text-sm mt-4">Don't Have an Account?{""}
             <Link 
-            to="/auth/signup"
+            to="/signup"
             className="text-primary font-medium hover:underline"
             >Signup</Link>
            </p>

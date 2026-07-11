@@ -41,8 +41,9 @@ function Signup(){
                 email: formData.email,
                 password: formData.password,
             });
+            
 
-            login(data);
+            login(data.user);
             localStorage.setItem("healthcareToken", data.token);
             navigate("/doctors");
         } catch (err) {
@@ -99,7 +100,7 @@ function Signup(){
 
                 <p className="text-center text-sm mt-4">Already have an account? {""}
                     <Link 
-                    to="/auth/login"
+                    to="/login"
                     className="text-primary font-medium hover:underline">
                         Login</Link>
                 </p>
