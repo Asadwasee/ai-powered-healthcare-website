@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import localDoctors from "../../constants/doctors";
 import { fetchDoctorById } from "../../services/doctorService";
 
 import {
@@ -16,21 +15,45 @@ import { Button } from "../../components/ui/Button";
 
 function DoctorDetails() {
   const { id } = useParams();
-  const fallbackDoctor = localDoctors.find((doc) => doc.id === Number(id));
-  const [doctor, setDoctor] = useState(fallbackDoctor || null);
+  const [doctor, setDoctor] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const loadDoctor = async () => {
-      try {
-        const data = await fetchDoctorById(id);
-        setDoctor(data);
-      } catch {
-        // Keep the local fallback doctor if the API is unavailable.
-      }
-    };
+  const loadDoctor = async () => {
+    try {
+      setLoading(true);
 
-    loadDoctor();
-  }, [id]);
+      const data = await fetchDoctorById(id);
+
+      setDoctor(data);
+      setError("");
+    } catch (err) {
+      console.error(err);
+      setError("Failed to load doctor.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadDoctor();
+}, [id]);
+
+if (loading) {
+  return (
+    <div className="flex justify-center items-center min-h-[60vh]">
+      Loading...
+    </div>
+  );
+}
+
+if (error) {
+  return (
+    <div className="flex justify-center items-center min-h-[60vh] text-red-500">
+      {error}
+    </div>
+  );
+}
 
   if (!doctor) {
     return (

@@ -34,23 +34,20 @@ function AppointmentForm({ doctor }) {
 
   const [submitError, setSubmitError] = useState("");
 
-  const timeSlots = [
-    "09:00 AM",
-    "09:30 AM",
-    "10:00 AM",
-    "10:30 AM",
-    "11:00 AM",
-    "11:30 AM",
-    "02:00 PM",
-    "02:30 PM",
-    "03:00 PM",
-    "03:30 PM",
-    "04:00 PM",
-  ];
+  const timeSlots = doctor?.timings || [];
 
   const today = new Date().toISOString().split("T")[0];
 
   const isToday = formData.date === today;
+
+  const selectedDay = formData.date
+  ? new Date(formData.date).toLocaleDateString("en-US", {
+      weekday: "long",
+    })
+  : "";
+
+  const isDoctorAvailable =
+  !selectedDay || doctor.availability.includes(selectedDay);
 
   const availableTimeSlots = !isToday
     ? timeSlots
@@ -189,11 +186,14 @@ function AppointmentForm({ doctor }) {
       setShowSuccessModal(true);
       resetForm();
     } catch (error) {
-      setSubmitError(
-        error?.response?.data?.message ||
-          "Unable to book the appointment right now. Please try again."
-      );
-    } finally {
+  const message =
+    error.response?.data?.message ||
+    "Unable to book the appointment right now. Please try again.";
+
+  setSubmitError(message);
+
+  alert(message);
+} finally {
       setLoading(false);
     }
   };
@@ -291,27 +291,34 @@ function AppointmentForm({ doctor }) {
 
           <div>
 
-            <label className="flex items-center gap-2 mb-2 text-sm font-semibold text-gray-700">
-              <CalendarDays size={18} />
-              Appointment Date
-            </label>
+  <label className="flex items-center gap-2 mb-2 text-sm font-semibold text-gray-700">
+    <CalendarDays size={18} />
+    Appointment Date
+  </label>
 
-            <input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleChange}
-              min={today}
-              className="w-full h-11 rounded-lg border border-gray-200 px-4 transition focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-primary"
-            />
+  <input
+    type="date"
+    name="date"
+    value={formData.date}
+    onChange={handleChange}
+    min={today}
+    className="w-full h-11 rounded-lg border border-gray-200 px-4 transition focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-primary"
+  />
 
-            {errors.date && (
-              <p className="text-sm text-red-500 mt-2">
-                {errors.date}
-              </p>
-            )}
+  {errors.date && (
+    <p className="text-sm text-red-500 mt-2">
+      {errors.date}
+    </p>
+  )}
 
-          </div>
+  {!errors.date && formData.date && !isDoctorAvailable && (
+    <p className="text-sm text-red-500 mt-2">
+      This doctor is unavailable on <strong>{selectedDay}</strong>.
+      Please choose another day.
+    </p>
+  )}
+
+</div>
 
           <div>
 

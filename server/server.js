@@ -14,6 +14,8 @@ import emergencyRoutes from './routes/emergencyRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
 import medicineRoutes from './routes/medicineRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
+import doctorRoutes from './routes/doctorRoutes.js';
+import appointmentRoutes from "./routes/appointmentRoutes.js";
 
 // Import middleware
 import { errorHandler } from './middleware/errorHandler.js';
@@ -47,6 +49,8 @@ app.use('/api/emergency', emergencyRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/medicines', medicineRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/doctors', doctorRoutes);
+app.use("/api/appointments", appointmentRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

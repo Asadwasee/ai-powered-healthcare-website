@@ -19,6 +19,19 @@ const createAppointment = async (req, res) => {
       return res.status(404).json({ message: 'Doctor not found' });
     }
 
+    // Check if the selected time slot is already booked
+const existingAppointment = await Appointment.findOne({
+  doctorId: doctor.id,
+  date,
+  time,
+});
+
+if (existingAppointment) {
+  return res.status(400).json({
+    message: "This time slot is already booked. Please choose another time.",
+  });
+}
+
     const appointment = await Appointment.create({
       appointmentId: buildAppointmentId(),
       doctorId: doctor.id,

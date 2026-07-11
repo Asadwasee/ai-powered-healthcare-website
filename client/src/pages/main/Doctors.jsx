@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import localDoctors from "../../constants/doctors";
 import DoctorCard from "../../components/cards/DoctorCard";
 import { Input } from "../../components/ui/Input";
 import { Search, Filter } from "lucide-react";
@@ -8,39 +7,39 @@ import { fetchDoctors } from "../../services/doctorService";
 function Doctors() {
   const [searchTerm, setSearchTerm] = useState("");
   const [specialization, setSpecialization] = useState("All");
-  const [doctors, setDoctors] = useState(localDoctors);
+  const [doctors, setDoctors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const loadDoctors = async () => {
-      try {
-        const data = await fetchDoctors();
-        setDoctors(data);
-      } catch {
-        setDoctors(localDoctors);
-      }
-    };
+  const loadDoctors = async () => {
+    try {
+      setLoading(true);
 
-    loadDoctors();
-  }, []);
+      const data = await fetchDoctors({
+        search: searchTerm,
+        specialization,
+      });
+      
+      setDoctors(data);
+      setError("");
+    } catch (err) {
+      console.error(err);
+      setError("Failed to load doctors.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadDoctors();
+}, [searchTerm, specialization]);
 
   const specializations = [
     "All",
     ...new Set(doctors.map((doctor) => doctor.specialization)),
   ];
 
-  const filteredDoctors = doctors.filter((doctor) => {
-    const matchesSearch =
-      doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doctor.specialization
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
-
-    const matchesSpecialization =
-      specialization === "All" ||
-      doctor.specialization === specialization;
-
-    return matchesSearch && matchesSpecialization;
-  });
+  
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-10">
@@ -113,6 +112,18 @@ function Doctors() {
 
       </div>
 
+      {loading && (
+        <div className="text-center py-16">
+          <p className="text-gray-500">Loading doctors...</p>
+        </div>
+      )}
+
+      {error && (
+        <div className="text-center py-8">
+          <p className="text-red-500">{error}</p>
+        </div>
+      )}
+
       {/* Results */}
 
       <div className="flex items-center justify-between mb-6">
@@ -122,15 +133,15 @@ function Doctors() {
         </h2>
 
         <span className="text-gray-500 font-medium">
-          {filteredDoctors.length} Doctor
-          {filteredDoctors.length !== 1 ? "s" : ""}
+          {doctors.length} Doctor
+          {doctors.length !== 1 ? "s" : ""}
         </span>
 
       </div>
 
       {/* Cards */}
 
-      {filteredDoctors.length === 0 ? (
+      {!loading && doctors.length === 0 ? (
 
         <div className="bg-white rounded-3xl border border-gray-100 shadow-sm py-20 text-center">
 
@@ -148,7 +159,7 @@ function Doctors() {
 
         <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
 
-          {filteredDoctors.map((doctor) => (
+          {doctors.map((doctor) => (
             <DoctorCard
               key={doctor.id}
               doctor={doctor}
