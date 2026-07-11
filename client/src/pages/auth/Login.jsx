@@ -3,8 +3,7 @@ import PasswordInput from "../../components/ui/PasswordInput";
 import { Button } from "../../components/ui/Button";
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-//import { loginUser } from "../../services/authService";
-import  loginUser from "../../services/authService";
+import { loginUser} from "../../services/authService";
 import GlobalStateContext from "../../context/GlobalStateContext";
 
 function Login(){
