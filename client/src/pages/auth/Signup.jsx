@@ -1,16 +1,22 @@
 import { Input } from "../../components/ui/Input";
 import PasswordInput from "../../components/ui/PasswordInput";
 import { Button } from "../../components/ui/Button";
-import {Link} from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { registerUser } from "../../services/authService";
+import GlobalStateContext from "../../context/GlobalStateContext";
 
 function Signup(){
+    const navigate = useNavigate();
+    const { login } = useContext(GlobalStateContext);
     const[formData, setFormData]= useState({
         name: "",
         email: "",
         password: "",
         confirmPassword: "",
     });
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
     const handleChange = (e)=>{
         setFormData({
             ...formData,
@@ -18,9 +24,32 @@ function Signup(){
         });
     };
 
-    const handleSubmit =(e)=>{
+    const handleSubmit = async (e)=>{
         e.preventDefault();
-        console.log(formData);
+        setError("");
+
+        if (formData.password !== formData.confirmPassword) {
+            setError("Passwords do not match.");
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const data = await registerUser({
+                name: formData.name,
+                email: formData.email,
+                password: formData.password,
+            });
+
+            login(data);
+            localStorage.setItem("healthcareToken", data.token);
+            navigate("/doctors");
+        } catch (err) {
+            setError(err?.response?.data?.message || "Signup failed. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     }
     return(
         <div className="space-y-6 animate-fade-in">
@@ -31,6 +60,9 @@ function Signup(){
   </p>
 </div>
             <form onSubmit={handleSubmit} className="space-y-4">
+                                {error && (
+                                    <p className="text-sm font-medium text-accent">{error}</p>
+                                )}
                 <Input
                 type="text"
                 name="name"
@@ -55,7 +87,7 @@ function Signup(){
                 label="Password"
                 />
                 <PasswordInput
-                name="confirmpassword"
+                name="confirmPassword"
                 placeholder="Confirm Password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
@@ -63,12 +95,12 @@ function Signup(){
                 />
 
                 {/* Signup button */}
-                <Button type="submit" >Create account</Button>
+                <Button type="submit" disabled={loading}>{loading ? "Creating account..." : "Create account"}</Button>
 
                 <p className="text-center text-sm mt-4">Already have an account? {""}
                     <Link 
                     to="/auth/login"
-                    className="text-primary font-medium hover-underline">
+                    className="text-primary font-medium hover:underline">
                         Login</Link>
                 </p>
 

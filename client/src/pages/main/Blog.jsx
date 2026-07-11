@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Search, Newspaper } from "lucide-react";
 
 import blogs from "../../constants/blogs";
@@ -36,8 +36,6 @@ function Blog() {
 
     return matchesSearch && matchesCategory;
   });
-
-  const featuredBlog = blogs[0];
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-10">

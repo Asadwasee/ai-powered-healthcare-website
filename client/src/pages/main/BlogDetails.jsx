@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   ArrowLeft,
@@ -30,7 +29,7 @@ function BlogDetails() {
         </p>
 
         <Link
-          to="/health-blog"
+          to="/blog"
           className="inline-flex items-center gap-2 mt-8 bg-primary text-white px-6 py-3 rounded-xl hover:opacity-90 transition"
         >
           <ArrowLeft size={18} />

@@ -1,4 +1,3 @@
-import React from "react";
 import { ShieldCheck, Stethoscope } from "lucide-react";
 
 function DiseaseCard({ disease }) {

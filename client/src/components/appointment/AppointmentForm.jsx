@@ -1,7 +1,8 @@
-import React, { useMemo, useState } from "react";
+import { useState } from "react";
 import { Input } from "../ui/Input";
 import { Button } from "../ui/Button";
 import AppointmentSuccessModal from "./AppointmentSuccessModal";
+import { createAppointment as submitAppointment } from "../../services/appointmentService";
 
 import {
   CalendarDays,
@@ -31,6 +32,8 @@ function AppointmentForm({ doctor }) {
 
   const [appointmentData, setAppointmentData] = useState(null);
 
+  const [submitError, setSubmitError] = useState("");
+
   const timeSlots = [
     "09:00 AM",
     "09:30 AM",
@@ -49,33 +52,30 @@ function AppointmentForm({ doctor }) {
 
   const isToday = formData.date === today;
 
-  const availableTimeSlots = useMemo(() => {
-    if (!isToday) return timeSlots;
+  const availableTimeSlots = !isToday
+    ? timeSlots
+    : timeSlots.filter((slot) => {
+        const now = new Date();
+        const [time, meridian] = slot.split(" ");
 
-    const now = new Date();
+        let [hour, minute] = time.split(":").map(Number);
 
-    return timeSlots.filter((slot) => {
-      const [time, meridian] = slot.split(" ");
+        if (meridian === "PM" && hour !== 12) {
+          hour += 12;
+        }
 
-      let [hour, minute] = time.split(":").map(Number);
+        if (meridian === "AM" && hour === 12) {
+          hour = 0;
+        }
 
-      if (meridian === "PM" && hour !== 12) {
-        hour += 12;
-      }
+        const slotDate = new Date();
 
-      if (meridian === "AM" && hour === 12) {
-        hour = 0;
-      }
+        slotDate.setHours(hour);
+        slotDate.setMinutes(minute);
+        slotDate.setSeconds(0);
 
-      const slotDate = new Date();
-
-      slotDate.setHours(hour);
-      slotDate.setMinutes(minute);
-      slotDate.setSeconds(0);
-
-      return slotDate > now;
-    });
-  }, [formData.date]);
+        return slotDate > now;
+      });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -155,37 +155,47 @@ function AppointmentForm({ doctor }) {
     });
 
     setErrors({});
+    setSubmitError("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;
 
     setLoading(true);
+    setSubmitError("");
 
-    setTimeout(() => {
-      const appointment = {
-        id: generateAppointmentID(),
-        doctorName: doctor.name,
+    try {
+      const data = await submitAppointment({
+        doctorId: doctor.id,
+        patientName: formData.patientName,
+        email: formData.email,
+        phone: formData.phone,
         date: formData.date,
         time: formData.time,
-        fee: doctor.fee,
+        reason: formData.reason,
+      });
+
+      const appointment = {
+        id: data.appointmentId || generateAppointmentID(),
+        doctorName: data.doctorName || doctor.name,
+        date: data.date || formData.date,
+        time: data.time || formData.time,
+        fee: data.fee || doctor.fee,
       };
 
       setAppointmentData(appointment);
-
       setShowSuccessModal(true);
-
       resetForm();
-
+    } catch (error) {
+      setSubmitError(
+        error?.response?.data?.message ||
+          "Unable to book the appointment right now. Please try again."
+      );
+    } finally {
       setLoading(false);
-
-      console.log({
-        doctor,
-        ...formData,
-      });
-    }, 1200);
+    }
   };
 
  return (
@@ -414,6 +424,12 @@ function AppointmentForm({ doctor }) {
           </div>
 
         </div>
+
+        {submitError && (
+          <p className="text-sm text-red-600 font-medium">
+            {submitError}
+          </p>
+        )}
 
         <Button
           type="submit"
