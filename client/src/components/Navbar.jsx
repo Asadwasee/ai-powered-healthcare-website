@@ -13,18 +13,20 @@ const Navbar = () => {
         { name: 'Emergency Support', path: '/emergency' },
         { name: 'Medical Blog', path: '/blog' },
         { name: 'Contact Us', path: '/contact' },
+        { name: 'Lab Tests', path: '/lab-tests' },
+        { name: 'My Lab Bookings', path: '/my-lab-bookings' },
     ];
 
     // Helper function to check active route styling
     const isActive = (path) => location.pathname === path;
 
     return (
-        <nav className="bg-white border-b border-gray-100 sticky top-0 z-50 backdrop-blur-md bg-white/90">
+        <nav className=".bg-white border-b border-gray-100 sticky top-0 z-50 backdrop-blur-md bg-white/90">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16 items-center">
                     
                     {/* Brand Logo */}
-                    <div className="flex-shrink-0 flex items-center gap-2">
+                    <div className="shrink-0 flex items-center gap-2">
                         <Link to="/home" className="flex items-center gap-2 group">
                             <div className="bg-teal-600 text-white p-2 rounded-xl group-hover:bg-teal-700 transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>

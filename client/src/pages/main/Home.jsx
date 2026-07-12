@@ -277,11 +277,6 @@ const Home = () => {
                     </div>
                 </div>
             </section>
-
-            {/* --- 8. FOOTER --- */}
-            <footer className="bg-white border-t border-gray-100 py-8 text-center text-xs text-gray-400 font-medium tracking-wide">
-                &copy; {new Date().getFullYear()} AI Healthcare Platform. All System Diagnostics Encrypted.
-            </footer>
         </div>
     );
 };
